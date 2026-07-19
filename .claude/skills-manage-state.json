@@ -1,0 +1,16 @@
+{
+  "category": "hugo",
+  "skills": {
+    "content-research-writer": "on",
+    "gstack": "on"
+  },
+  "plugins": {
+    "superpowers@claude-plugins-official": true
+  },
+  "mcps": [
+    "context7",
+    "playwright",
+    "sequential-thinking"
+  ],
+  "timestamp": "2026-07-19T00:00:00Z"
+}

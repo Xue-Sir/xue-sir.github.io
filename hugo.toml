@@ -1,0 +1,60 @@
+baseURL = 'https://example.org/'
+languageCode = 'en'
+title = "xuesir's log"
+theme = "PaperMod"
+
+[params]
+  ShowToc = true
+  TocOpen = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowReadingTime = true
+  ShowPostMeta = true
+  ShowCategories = true
+  ShowTags = true
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  hidemeta = false
+  hideSummary = false
+
+[params.homeInfoParams]
+  Title = "Welcome to xuesir's log"
+  Content = "A personal blog about technology, sharing and insights"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/Xue-Sir"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+[[menu.main]]
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  weight = 2
+
+[[menu.main]]
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories/"
+  weight = 3
+
+[[menu.main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  weight = 4
