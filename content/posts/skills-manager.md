@@ -1,15 +1,17 @@
 ---
-title: "skills-manager: 一键切换你的 Claude Code 工具集"
+title: "skills-manager: 一键切换你的 Claude Code CLI 工具集"
 date: 2026-07-19
 draft: false
 categories: ["Tool"]
-tags: ["claude-code", "skills-manager", "workflow"]
-description: "你是否也有这样的烦恼：装了一堆 skills、MCPs、plugins，不同项目需要不同的工具组合，每次都要手动开关？"
+tags: ["claude-code-cli", "skills-manager", "workflow"]
+description: "面向 Claude Code CLI：把 skills、MCPs 和 plugins 按项目分类管理，不再反复手动开关。"
 ---
 
-# skills-manager: 一键切换你的 Claude Code 工具集
+# skills-manager: 一键切换你的 Claude Code CLI 工具集
 
 > 你是否也有这样的烦恼：装了一堆 skills、MCPs、plugins，不同项目需要不同的工具组合，每次都要手动开关？
+
+> 本文对应 **Claude Code CLI** 实现，不保证 Desktop、Web 或 IDE 集成使用相同的发现与配置行为。Codex CLI 请使用同一仓库中的 `skills-manager-codex`。
 
 ## 摘要
 
@@ -132,7 +134,10 @@ skills-manager 会自动把这些 MCP 迁移到项目级控制：
 ### 安装
 
 ```bash
-git clone https://github.com/Xue-Sir/skills-manager.git ~/.claude/skills/skills-manager
+git clone --depth 1 --filter=blob:none --sparse https://github.com/Xue-Sir/skills-manager.git skills-manager-claude-code-source
+git -C skills-manager-claude-code-source sparse-checkout set skills-manager-claude-code
+mkdir -p ~/.claude/skills
+cp -R skills-manager-claude-code-source/skills-manager-claude-code ~/.claude/skills/skills-manager
 ```
 
 ### 首次使用
@@ -153,6 +158,7 @@ git clone https://github.com/Xue-Sir/skills-manager.git ~/.claude/skills/skills-
 ## 链接
 
 - GitHub: https://github.com/Xue-Sir/skills-manager
+- Codex 版本：同一仓库下的 `skills-manager-codex`
 - 有问题或建议？欢迎提 Issue！
 
 ---
