@@ -5,9 +5,8 @@ draft: false
 categories: ["Tool"]
 tags: ["codex", "skills-manager", "mcp", "workflow"]
 description: "面向 Codex CLI：把 skills 和 MCP 统一接管、组合、分类，再按项目启用；保留项目自有功能，并用状态账本保证切换可逆。"
+summary: "把 Codex CLI 的 Skills 与 MCP 统一接管、组合和分类，再为每个项目启用最小且可逆的功能集合。"
 ---
-
-# skills-manager for Codex CLI：按项目管理 Skills、MCP 与功能分类
 
 当 `~/.codex/skills` 里的 skill 越来越多，`~/.codex/config.toml` 里也积累了多个 MCP，真正麻烦的往往不是安装，而是管理：
 
@@ -19,6 +18,24 @@ description: "面向 Codex CLI：把 skills 和 MCP 统一接管、组合、分�
 我为此写了 Codex CLI 版本的 **skills-manager**。它把 skill、MCP，以及由 skills-manager 自己定义的 plugin 统一称为“功能”，先集中接管，再按项目选择。
 
 本文对应 **OpenAI Codex CLI** 的目录发现和项目配置行为，不保证 Codex Desktop 或其他界面采用相同机制。Claude Code CLI 版本位于同一仓库的 `skills-manager-claude-code/`。
+
+<!--more-->
+
+## 摘要
+
+**Who is this for?** Codex CLI users who maintain multiple skills and MCP servers across projects with different tool requirements.
+
+**Core idea:** Adopt those capabilities into one user-level catalog, group related skills and MCPs, and switch each project to a minimal category without overwriting project-owned tools.
+
+skills-manager discovers user-level functions, records unique ownership, and lets the AI recommend or edit reusable categories through natural language. When a project switches categories, selected skills are linked into `.codex/skills/`, selected MCP definitions are merged into `.codex/config.toml`, and `.codex/skills-manager-state.toml` records what the manager created versus what the project already owned. This makes later switches reversible and keeps unrelated project functions intact.
+
+---
+
+**这是写给谁的？** 在多个项目之间维护不同 Skills 与 MCP 组合的 Codex CLI 用户。
+
+**核心观点：** 先把功能接管到统一的用户级目录，再按任务组合为分类；项目切换分类时，只添加所需功能，并保留项目原有配置。
+
+skills-manager 支持自然语言推荐、分类和切换。它用链接共享 skill，把选中的 MCP 合并到项目配置，并通过项目状态账本区分“由 manager 创建的条目”和“项目本来就有的条目”，从而让切换保持可逆。
 
 ## 一句话理解
 

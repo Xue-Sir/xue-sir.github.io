@@ -1,17 +1,18 @@
 ---
-title: "skills-manager: 一键切换你的 Claude Code CLI 工具集"
+title: "skills-manager for Claude Code CLI：按项目切换 Skills、MCP 与 Plugins"
 date: 2026-07-19
 draft: false
 categories: ["Tool"]
 tags: ["claude-code-cli", "skills-manager", "workflow"]
 description: "面向 Claude Code CLI：把 skills、MCPs 和 plugins 按项目分类管理，不再反复手动开关。"
+summary: "把 Claude Code CLI 的 Skills、MCP 与 Plugins 组织成项目分类，一次配置，按需切换。"
 ---
-
-# skills-manager: 一键切换你的 Claude Code CLI 工具集
 
 > 你是否也有这样的烦恼：装了一堆 skills、MCPs、plugins，不同项目需要不同的工具组合，每次都要手动开关？
 
 > 本文对应 **Claude Code CLI** 实现，不保证 Desktop、Web 或 IDE 集成使用相同的发现与配置行为。Codex CLI 请使用同一仓库中的 `skills-manager-codex`。
+
+<!--more-->
 
 ## 摘要
 
