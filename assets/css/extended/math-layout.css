@@ -1,0 +1,55 @@
+.post-content {
+    counter-reset: equation;
+}
+
+.post-content .katex {
+    font-size: 1.08em;
+}
+
+.math-display {
+    position: relative;
+    counter-increment: equation;
+    margin: 1.6rem 0 2rem;
+    padding: 0.55rem 3.5rem 0.7rem 0.5rem;
+}
+
+.math-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center;
+    scrollbar-width: thin;
+}
+
+.math-display .katex-display {
+    margin: 0;
+}
+
+.equation-number {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.equation-number::before {
+    content: "(" counter(equation) ")";
+}
+
+@media screen and (max-width: 640px) {
+    .math-display {
+        margin: 1.4rem 0 1.8rem;
+        padding-right: 2.75rem;
+        padding-left: 0;
+    }
+
+    .post-content .katex {
+        font-size: 1em;
+    }
+
+    .equation-number {
+        right: 0.15rem;
+    }
+}

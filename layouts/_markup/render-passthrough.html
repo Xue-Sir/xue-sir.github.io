@@ -1,8 +1,16 @@
-{{- $opts := dict "displayMode" (eq .Type "block") }}
+{{- $isBlock := eq .Type "block" }}
+{{- $opts := dict "output" "htmlAndMathml" "displayMode" $isBlock }}
 {{- with try (transform.ToMath .Inner $opts) }}
   {{- with .Err }}
     {{- errorf "Unable to render mathematical markup at %s: %s" $.Position . }}
   {{- else }}
-    {{- .Value }}
+    {{- if $isBlock }}
+      <div class="math-display">
+        <div class="math-scroll">{{ .Value }}</div>
+        <span class="equation-number" aria-hidden="true"></span>
+      </div>
+    {{- else }}
+      {{- .Value }}
+    {{- end }}
   {{- end }}
 {{- end -}}
