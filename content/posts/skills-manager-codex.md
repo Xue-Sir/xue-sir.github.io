@@ -25,7 +25,9 @@ summary: "把 Codex CLI 的 Skills 与 MCP 统一接管、组合和分类，再�
 
 **Who is this for?** Codex CLI users who maintain multiple skills and MCP servers across projects with different tool requirements.
 
-**Core idea:** Adopt those capabilities into one user-level catalog, group related skills and MCPs, and switch each project to a minimal category without overwriting project-owned tools.
+**Core idea:** Adopt those capabilities into one private catalog outside `~/.codex/skills`, group related skills and MCPs, and switch each project to a minimal category without overwriting project-owned tools.
+
+The package at `~/.codex/skills/skills-manager` contains only the manager itself. Managed skills, MCP definitions, plugins, configuration, retirement data, and backups live under `~/.codex/skills-manager-data`. This boundary is essential because Codex recursively discovers `SKILL.md` files below `~/.codex/skills`; storing the catalog inside the package would expose every managed skill globally before a category is selected.
 
 skills-manager discovers user-level functions, records unique ownership, and lets the AI recommend or edit reusable categories through natural language. When a project switches categories, selected skills are linked into `.codex/skills/`, selected MCP definitions are merged into `.codex/config.toml`, and `.codex/skills-manager-state.toml` records what the manager created versus what the project already owned. This makes later switches reversible and keeps unrelated project functions intact.
 
@@ -49,11 +51,15 @@ $skills-manager 当前项目使用 research
 
 用户不需要记住 Python 命令。AI 会把自然语言翻译成确定的操作，先展示预览，说明将移动、写入或移除什么，得到确认后才执行。
 
+这个功能库不放在 skill 包里面。`~/.codex/skills/skills-manager` 只保存 manager 自身；所有运行数据统一位于 `~/.codex/skills-manager-data`。这是功能隔离能够成立的前提：Codex 会递归发现 `~/.codex/skills` 下的 `SKILL.md`，如果把被管理的 skill 或含有 `SKILL.md` 的备份放进 manager 包，它们仍会被全局加载，分类就失去了意义。
+
+因此 skills-manager 包本身是无状态、可复制的：把它复制到另一台电脑不会携带原电脑的功能或配置；首次初始化会在新电脑创建独立的 `skills-manager-data`。以后功能的增删改、更新、退役、恢复和备份也全部发生在数据目录，而不是程序包中。
+
 ## 三种功能
 
 ### Skill
 
-独立 skill 存放在 skills-manager 的 `code_skills/active/` 中。项目启用它时，不复制整份内容，而是在：
+独立 skill 存放在 `~/.codex/skills-manager-data/code_skills/active/` 中。项目启用它时，不复制整份内容，而是在：
 
 ```text
 <project>/.codex/skills/<skill>
@@ -66,7 +72,7 @@ $skills-manager 当前项目使用 research
 独立 MCP 的定义集中保存在：
 
 ```text
-code_mcp/mcps.toml
+~/.codex/skills-manager-data/code_mcp/mcps.toml
 ```
 
 它使用标准的 `[mcp_servers.<id>]` 格式。项目切换分类时，skills-manager 只把选中的 MCP 合并进：
@@ -80,7 +86,7 @@ code_mcp/mcps.toml
 这里的 plugin 不是 Codex 原生 plugin，而是 skills-manager 定义的功能包。一个 plugin 可以包含多个 skills 和 MCP：
 
 ```text
-code_plugin/<plugin>/
+~/.codex/skills-manager-data/code_plugin/<plugin>/
   <skill-a>/
   <skill-b>/
   mcps.toml
@@ -131,12 +137,12 @@ skills-manager 会检查：
 
 - 用户级 skills：`~/.codex/skills`
 - 用户级 MCP：`~/.codex/config.toml`
-- manager 内部存储、注册表与指纹是否一致
+- `~/.codex/skills-manager-data` 中的存储、注册表与指纹是否一致
 
 发现新的外部功能后，它只会列为候选，不会擅自迁移。用户确认后：
 
-- skill 被移入 `code_skills/active/`；
-- MCP 被移入 `code_mcp/mcps.toml`；
+- skill 被移入 `~/.codex/skills-manager-data/code_skills/active/`；
+- MCP 被移入 `~/.codex/skills-manager-data/code_mcp/mcps.toml`；
 - 用户级 `config.toml` 中对应的 MCP 表被移除；
 - `All`、能力描述、指纹和扫描状态同步更新。
 
@@ -169,7 +175,7 @@ AI 会结合项目文件、功能摘要和 plugin 边界，区分必需功能、
 
 ## 配置为什么要拆开
 
-skills-manager 没有把所有信息塞进一个大文件：
+skills-manager 没有把所有信息塞进一个大文件。以下配置全部位于 `~/.codex/skills-manager-data/config/`，不会在 skill 包中保留第二份：
 
 | 配置 | 职责 |
 |---|---|
@@ -207,11 +213,17 @@ cp -R skills-manager-codex-source/skills-manager-codex ~/.codex/skills/skills-ma
 python -m pip install -r ~/.codex/skills/skills-manager/requirements.txt
 ```
 
-仓库中的 Codex 配置是空白初始化模板，不包含作者自己的 skills、MCP、密钥或用户配置。
+Codex 发布包不包含运行时 `config`、`code_*`、`retired` 或 `backups` 目录，也不包含作者自己的 skills、MCP、密钥或用户配置。首次初始化时，程序直接在 `~/.codex/skills-manager-data` 生成所需结构。
 
 ## 第一次使用
 
-可以直接用自然语言开始：
+先用自然语言初始化私有数据目录：
+
+```text
+$skills-manager 初始化私有数据目录
+```
+
+确认目标为 `~/.codex/skills-manager-data` 后，再扫描外部功能：
 
 ```text
 $skills-manager 扫描当前用户的 skills 和 MCP，列出尚未接管的功能
