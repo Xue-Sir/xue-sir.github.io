@@ -1,11 +1,12 @@
 ---
 title: "EdgeMd：面向本地 Markdown 文件的 Windows 侧边工具"
 date: 2026-09-18
+lastmod: 2026-10-08
 draft: false
 categories: ["Tool"]
 tags: ["windows", "markdown", "desktop-app", "productivity"]
-description: "介绍 EdgeMd 的设计目标、文件模型、交互功能、发布方式和 v0.1.0.0 的使用范围。"
-summary: "EdgeMd 面向 Windows 本地 Markdown 文件，提供右侧驻留、任务操作、轻量编辑、外部变更监视和公开发布附件。"
+description: "介绍 EdgeMd v0.2.0.0 的本地 Markdown 文件模型、窗口尺寸修复、列表多选层级编辑、撤销重做和标题折叠。"
+summary: "EdgeMd 面向 Windows 本地 Markdown 文件，提供右侧驻留、任务操作、范围选择、轻量编辑、撤销重做和标题折叠。"
 ---
 
 EdgeMd 是一款 Windows 桌面工具，面向本地 Markdown 文件提供侧边查看和轻量编辑能力。
@@ -18,13 +19,17 @@ EdgeMd 是一款 Windows 桌面工具，面向本地 Markdown 文件提供侧边
 
 ## 摘要
 
-EdgeMd 当前面向 Windows x64，公开版本为 **v0.1.0.0**。版本发布页提供便携目录版、单文件自包含版和 SHA256SUMS.txt 校验文件。
+EdgeMd 当前面向 Windows x64，公开版本为 **v0.2.0.0**。版本发布页提供便携目录版、单文件自包含版和 SHA256SUMS.txt 校验文件。
 
 当前实现包括：
 
 - 将 Markdown 文件固定在屏幕右侧显示；
 - 读取和写回本地 .md、.markdown 文件；
 - 任务勾选、行编辑、同级项目和下级任务；
+- 列表单行、范围和 Ctrl 多选；Tab / Shift+Tab 只调整明确选中的行；
+- Ctrl+Z 撤销、Ctrl+Y 或 Ctrl+Shift+Z 重做，并在外部文件修改时保护新内容；
+- 标题左侧常驻折叠箭头，章节收起状态只影响阅读视图；
+- 长行编辑自动换行，窗口重绘后保留滚动位置和任务复选框焦点；
 - 标题、列表、缩进、YAML frontmatter 和常见双链解析；
 - 外部文件变更监视和编辑冲突提示；
 - 置顶、透明度、主题、鼠标穿透和托盘控制。
@@ -53,6 +58,8 @@ EdgeMd 围绕以下目标实现：
 - 程序退出后，文档仍保持标准 Markdown 格式。
 
 当前版本将文档内容保持在行级模型中，优先支持计划和清单场景。窗口显示、任务修改和文件保存围绕同一份本地文件完成。
+
+v0.2.0.0 还修复了高分辨率显示器上的窗口高度持久化：高度上限提高到 2400 DIP，贴边停靠时的实际尺寸不会覆盖用户保存的首选尺寸。
 
 ## 2. 文件模型和编辑器关系
 
@@ -110,6 +117,10 @@ YAML frontmatter 会保留在原文件中，阅读视图中隐藏。缩进、复
 7. 右键一行，添加同级项目、添加下级任务或删除当前行；
 8. 普通模式下按住 Alt 拖动窗口内容，移动窗口位置。
 
+列表支持单击选中一行、Shift+单击选择范围和 Ctrl+单击增减单独行。按 Tab / Shift+Tab 只调整选中行；未选中的子项保持原位。标题左侧始终显示折叠箭头，点击后收起该标题下的内容，直到下一个同级或更高级标题。编辑框内长行会自动换行。
+
+Ctrl+Z 撤销，Ctrl+Y 或 Ctrl+Shift+Z 重做，右键菜单也提供入口。当前文件最多保留 20 步历史；如果外部程序修改了文件，撤销/重做历史会失效，以免覆盖外部内容。
+
 窗口支持鼠标穿透。启用后，鼠标操作可以落到后方程序；需要滚轮、编辑或任务操作时，可以从托盘菜单关闭，也可以点击窗口左下角的按钮切换。
 
 ## 5. 文件监视和冲突处理
@@ -140,7 +151,7 @@ Windows 右下角托盘菜单可以显示或隐藏窗口、打开 Markdown 文�
 
 ## 7. 使用方式
 
-可以从 [v0.1.0.0 Release](https://github.com/Xue-Sir/EdgeMd/releases/tag/v0.1.0.0) 下载程序。
+可以从 [v0.2.0.0 Release](https://github.com/Xue-Sir/EdgeMd/releases/tag/v0.2.0.0) 下载程序。
 
 使用便携版时，解压压缩包，运行目录中的 EdgeMd.exe，再从窗口右下角的打开按钮选择 Markdown 文件。
 
@@ -158,19 +169,19 @@ EdgeMd 的源码、文档、测试和构建配置均位于公开仓库：
 - [用户说明书](https://github.com/Xue-Sir/EdgeMd/blob/main/docs/USER-MANUAL.md)：首次使用和窗口操作；
 - [开发文档](https://github.com/Xue-Sir/EdgeMd/blob/main/docs/DEVELOPMENT.md)：构建、测试和发布；
 - [MIT License](https://github.com/Xue-Sir/EdgeMd/blob/main/LICENSE)：许可证；
-- [v0.1.0.0 Release](https://github.com/Xue-Sir/EdgeMd/releases/tag/v0.1.0.0)：版本说明和下载附件。
+- [v0.2.0.0 Release](https://github.com/Xue-Sir/EdgeMd/releases/tag/v0.2.0.0)：版本说明和下载附件。
 
 | 下载文件 | 说明 |
 | --- | --- |
-| [EdgeMd-v0.1.0.0-win-x64-portable.zip](https://github.com/Xue-Sir/EdgeMd/releases/download/v0.1.0.0/EdgeMd-v0.1.0.0-win-x64-portable.zip) | 便携目录版。解压后运行 EdgeMd.exe，适合长期放在固定目录使用。 |
-| [EdgeMd-v0.1.0.0-win-x64.exe](https://github.com/Xue-Sir/EdgeMd/releases/download/v0.1.0.0/EdgeMd-v0.1.0.0-win-x64.exe) | 单文件自包含版，适合临时复制到其他 Windows x64 电脑。 |
-| [SHA256SUMS.txt](https://github.com/Xue-Sir/EdgeMd/releases/download/v0.1.0.0/SHA256SUMS.txt) | 下载后核对文件完整性。 |
+| [EdgeMd-v0.2.0.0-win-x64-portable.zip](https://github.com/Xue-Sir/EdgeMd/releases/download/v0.2.0.0/EdgeMd-v0.2.0.0-win-x64-portable.zip) | 便携目录版。解压后运行 EdgeMd.exe，适合长期放在固定目录使用。 |
+| [EdgeMd-v0.2.0.0-win-x64.exe](https://github.com/Xue-Sir/EdgeMd/releases/download/v0.2.0.0/EdgeMd-v0.2.0.0-win-x64.exe) | 单文件自包含版，适合临时复制到其他 Windows x64 电脑。 |
+| [SHA256SUMS.txt](https://github.com/Xue-Sir/EdgeMd/releases/download/v0.2.0.0/SHA256SUMS.txt) | 下载后核对文件完整性。 |
 
 当前版本没有代码签名证书。如果 Windows SmartScreen 或杀毒软件提示未知发布者，可以先下载 SHA256SUMS.txt，核对压缩包或程序的 SHA-256 值，再决定是否运行。
 
-## 9. v0.1.0.0 的范围
+## 9. v0.2.0.0 的范围
 
-v0.1.0.0 优先完成了“打开真实 Markdown 文件、固定到屏幕右侧、快速修改任务”这条流程，当前范围如下：
+v0.2.0.0 在首版基础上补全了长计划操作和桌面显示体验，当前范围如下：
 
 - Windows x64；
 - 便携目录版和单文件程序；
